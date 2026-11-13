@@ -1,0 +1,32 @@
+<nav class="bg-white border-b border-gray-200 px-6 py-4">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+    <a routerLink="/trilhas" class="text-xl font-bold text-blue-600">
+      Trilhas
+    </a>
+
+    <div class="flex items-center gap-6">
+
+      <a
+        routerLink="/trilhas"
+        routerLinkActive="text-blue-600"
+        class="text-gray-600 hover:text-blue-600 font-medium transition">
+        Trilhas
+      </a>
+
+      <a
+        routerLink="/usuarios"
+        routerLinkActive="text-blue-600"
+        class="text-gray-600 hover:text-blue-600 font-medium transition">
+        Usuários
+      </a>
+
+      <button
+        (click)="sair()"
+        class="text-red-500 hover:text-red-700 font-medium transition">
+        Sair
+        </button>
+
+    </div>
+  </div>
+</nav>

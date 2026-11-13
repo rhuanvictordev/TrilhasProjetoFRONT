@@ -1,0 +1,23 @@
+
+@if (notificationService.notification(); as notification) {
+
+    <div class="fixed top-5 right-5 z-50 min-w-80 max-w-md
+                p-4 rounded-lg shadow-lg flex items-center gap-3"
+         [class.bg-green-600]="notification.type === 'success'"
+         [class.bg-red-600]="notification.type === 'error'"
+         [class.bg-yellow-600]="notification.type === 'warning'"
+         [class.bg-blue-600]="notification.type === 'info'">
+
+        <span class="text-white font-semibold flex-1">
+            {{ notification.message }}
+        </span>
+
+        <button
+            (click)="notificationService.hide()"
+            class="text-white font-bold cursor-pointer">
+            ✕
+        </button>
+
+    </div>
+
+}
