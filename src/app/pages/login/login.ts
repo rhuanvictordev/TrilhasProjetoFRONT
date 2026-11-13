@@ -39,7 +39,7 @@ export class Login {
 
             this.notification.success('Login realizado com sucesso!');
 
-            this.router.navigate(['/trilhas']);
+            this.router.navigate(['/inicio']);
             },
             error: (erro) => {
             console.error('Erro ao realizar login:', erro);

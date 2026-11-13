@@ -1,15 +1,17 @@
 
 import { Routes } from '@angular/router';
-import { Trilhas } from './pages/trilhas/trilhas';
+import { Inicio } from './pages/inicio/inicio';
 import { Login } from './pages/login/login';
 import { Cadastro } from './pages/cadastro/cadastro';
 import { authGuard } from './guards/auth.guard';
 import { NotFound } from './pages/not-found/not-found';
+import { Trilhas } from './pages/trilhas/trilhas';
+import { Usuarios } from './pages/usuarios/usuarios';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'trilhas',
+    redirectTo: 'inicio',
     pathMatch: 'full'
   },
   {
@@ -21,8 +23,18 @@ export const routes: Routes = [
     component: Cadastro
   },
   {
+    path: 'inicio',
+    component: Inicio,
+    canActivate: [authGuard]
+  },
+  {
     path: 'trilhas',
     component: Trilhas,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'usuarios',
+    component: Usuarios,
     canActivate: [authGuard]
   },
   {

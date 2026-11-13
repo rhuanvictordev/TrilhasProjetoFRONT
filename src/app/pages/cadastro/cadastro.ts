@@ -32,15 +32,14 @@ export class Cadastro {
         senha: this.senha
     };
 
-    this.http.post('http://localhost:8080/api/usuarios', obj).subscribe({
+    this.http.post('http://localhost:8080/api/auth/register', obj).subscribe({
       next: () => {
         this.notification.success('Conta criada com sucesso!');
         this.router.navigate(['/login']);
       },
       error: (erro) => {
         console.error(erro);
-
-        if (erro.status === 409) {
+        if (erro.status === 409 || erro.status == 403) {
           this.notification.warning('Este e-mail já foi cadastrado!');
         } else {
           this.notification.error('Não foi possível criar a conta!');

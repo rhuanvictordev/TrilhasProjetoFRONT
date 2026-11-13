@@ -1,0 +1,148 @@
+<div class="min-h-screen bg-gray-100 p-8">
+
+  <div class="mx-auto max-w-6xl">
+
+    <h1 class="text-3xl font-bold text-gray-800">
+      Bem vindo ao Melhores Trilhas!
+    </h1>
+
+    <p class="mt-2 text-gray-500">
+      Gerencie as trilhas cadastradas no sistema.
+    </p>
+
+    <button (click)="abrirModal()" class="mt-6 rounded-lg cursor-pointer bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">Nova trilha</button>
+
+    @if (modalAberto()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+
+    <div class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-gray-800">
+        {{ idEditando() === null ? 'Nova trilha' : 'Editar trilha' }}
+        </h2>
+
+        <button
+          (click)="fecharModal()"
+          class="text-2xl text-gray-400 hover:text-gray-700"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form #formulario="ngForm" (ngSubmit)="salvar()">
+
+        <div class="mb-4">
+          <label class="mb-1 block text-sm font-medium text-gray-700">
+            Nome
+          </label>
+
+          <input
+            required
+            type="text"
+            name="nome"
+            [(ngModel)]="nome"
+            class="w-full rounded-lg border border-gray-300 p-3"
+            />
+        </div>
+
+        <div class="mb-4">
+          <label class="mb-1 block text-sm font-medium text-gray-700">
+            Descrição
+          </label>
+
+          <textarea
+            required
+            name="descricao"
+            [(ngModel)]="descricao"
+            rows="3"
+            class="w-full rounded-lg border border-gray-300 p-3"
+            ></textarea>
+        </div>
+
+        <div class="mb-6">
+          <label class="mb-1 block text-sm font-medium text-gray-700">
+            Distância em metros
+          </label>
+
+          <input
+            type="number"
+            name="distanciaMetros"
+            [(ngModel)]="distanciaMetros"
+            required
+            min="1"
+            class="w-full rounded-lg border border-gray-300 p-3"
+            />
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            (click)="fecharModal()"
+            class="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="formulario.invalid"
+            class="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+            Salvar
+            </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+}
+
+    
+
+
+    <div class="mt-8 overflow-hidden rounded-xl bg-white shadow">
+        <table class="w-full text-left">
+
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="p-4">ID</th>
+                <th class="p-4">Nome</th>
+                <th class="p-4">Descrição</th>
+                <th class="p-4">Distância</th>
+                <th class="p-4">Ações</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @for (trilha of trilhas(); track trilha.id) {
+                <tr class="border-t">
+                <td class="p-4">{{ trilha.id }}</td>
+                <td class="p-4">{{ trilha.nome }}</td>
+                <td class="p-4">{{ trilha.descricao }}</td>
+                <td class="p-4">{{ trilha.distanciaMetros }} metros</td>
+                <td class="p-4">
+                    <button
+                    (click)="editar(trilha)"
+                    class="rounded-lg bg-yellow-500 px-3 py-1 text-white hover:bg-yellow-600"
+                    >
+                    Editar
+                    </button>
+                <button
+                    (click)="deletar(trilha.id)"
+                    class="rounded-lg bg-red-600 px-3 py-1 text-white hover:bg-red-700"
+                >
+                    Excluir
+                </button>
+                </td>
+                </tr>
+            }
+            </tbody>
+
+        </table>
+    </div>
+
+  </div>
+
+</div>
