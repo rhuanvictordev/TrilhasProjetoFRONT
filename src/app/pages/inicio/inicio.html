@@ -1,10 +1,16 @@
 <div class="min-h-screen bg-gray-100 p-8">
 
-  <div class="mx-auto max-w-6xl">
+  <div class="mx-auto max-w-7xl">
 
-    <h1 class="text-3xl font-bold text-gray-800">
-      Bem vindo ao Melhores Trilhas!
-    </h1>
+    <div class="gap-10 flex">
+      <h1 class="text-3xl font-bold text-gray-800"> Bem vindo de volta {{usuarioLogado()?.nome}}! </h1>
+
+      @if (usuarioLogado()?.papel === "user") {
+          <button (click)="uparConta()" class="bg-blue-600 cursor-pointer rounded-lg text-white px-2 py-1 hover:bg-blue-400 duration-300">Adquirir acesso privilegiado</button>
+      }
+    </div>
+
+    <h2>Seu acesso expirará às {{ horarioExpiracao() }}</h2>
 
     <p class="mt-2 text-gray-500">
       Gerencie as trilhas cadastradas no sistema.

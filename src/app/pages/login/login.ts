@@ -43,7 +43,7 @@ export class Login {
             },
             error: (erro) => {
             console.error('Erro ao realizar login:', erro);
-            this.notification.error('E-mail ou senha inválidos!');
+            this.notification.warning('E-mail ou senha inválidos!');
             }
         });
         }

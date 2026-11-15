@@ -14,12 +14,14 @@
         Ver Trilhas
       </a>
 
-      <a
-        routerLink="/usuarios"
-        routerLinkActive="text-blue-600"
-        class="text-gray-600 hover:text-blue-600 font-medium transition">
-        Gerenciar Usuários
-      </a>
+      @if (usuarioLogado()?.papel === "adm") {
+          <a
+              routerLink="/usuarios"
+              routerLinkActive="text-blue-600"
+              class="text-gray-600 hover:text-blue-600 font-medium transition">
+              Gerenciar Usuários
+          </a>
+      }
 
       <button
         (click)="sair()"

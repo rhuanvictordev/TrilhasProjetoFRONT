@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Usuarios } from '../usuarios/usuarios';
+import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 interface Trilha {
   id: number;
@@ -9,8 +12,16 @@ interface Trilha {
   distanciaMetros: number;
 }
 
+interface Usuario{
+  id: number;
+  nome: string;
+  email: string;
+  senha: string;
+  papel: string;
+}
+
 @Component({
-    imports: [FormsModule],
+  imports: [FormsModule],
   selector: 'app-inicio',
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
@@ -20,14 +31,47 @@ export class Inicio implements OnInit {
 
 private http = inject(HttpClient);
 trilhas = signal<Trilha[]>([]);
+usuarioLogado = signal<Usuario | null>(null);
 idEditando = signal<number | null>(null);
 modalAberto = signal(false);
 nome = signal('');
 descricao = signal('');
 distanciaMetros = signal(0);
+horarioExpiracao = signal<string | null>(null);
+private router = inject(Router);
+private notification = inject(NotificationService);
 
 abrirModal() {
   this.modalAberto.set(true);
+}
+
+uparConta() {
+    var token = localStorage.getItem("secret");
+
+    var obj = { email: this.usuarioLogado()?.email }
+
+    this.http.post('http://localhost:8080/api/usuarios/administrar', obj,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    ).subscribe({
+        next: (res) => {
+            if (res === true){
+              this.notification.info('Permissões adquiridas com sucesso! recarregando interface, aguarde...');
+              setTimeout(()=>{
+                  window.location.reload();
+              }, 4000)
+            }
+        },
+        error: (erro) => {
+            console.log('Erro ao buscar info do usuario:', erro);
+            this.router.navigate(['/login']);
+            this.notification.info('Acesso expirado!');
+            localStorage.clear();
+        }
+    });
 }
 
 fecharModal() {
@@ -114,7 +158,41 @@ carregarTrilhas() {
   });
 }
 
+carregarInfoUsuario() {
+    var token = localStorage.getItem("secret");
+
+    this.http.post<Usuario>(
+        'http://localhost:8080/api/auth/info',
+        token
+    ).subscribe({
+        next: (dados) => {
+            this.usuarioLogado.set(dados);
+            console.log(dados);
+        },
+        error: (erro) => {
+            console.log('Erro ao buscar info do usuario:', erro);
+            this.router.navigate(['/login']);
+            this.notification.info('Acesso expirado!');
+            localStorage.clear();
+        }
+    });
+}
+
+carregarExpiracaoToken() {
+    var token = localStorage.getItem("secret");
+    if (!token) {
+        return;
+    }
+    var payload = JSON.parse(atob(token.split('.')[1]));
+    var dataExpiracao = new Date(payload.exp * 1000);
+    this.horarioExpiracao.set(
+        dataExpiracao.toLocaleTimeString('en-US')
+    );
+}
+
     ngOnInit() {
-        this.carregarTrilhas();
+      this.carregarInfoUsuario();
+      this.carregarExpiracaoToken();
+      //this.carregarTrilhas();
     }
 }
